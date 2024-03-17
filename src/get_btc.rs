@@ -14,6 +14,7 @@ pub mod get_bitcoin {
         v_btctousdmore: Vec<f64>,
         v_timestamp: Vec<i64>,
         btctousd: f64,
+        startbtctousd: f64,
         btctousdless: f64,
         btctousdmore: f64
     }
@@ -26,6 +27,7 @@ pub mod get_bitcoin {
             v_btctousdmore: Vec::new(),
             v_timestamp: Vec::new(),
             btctousd: 0.0,
+            startbtctousd: 0.0,
             btctousdless: 0.0,
             btctousdmore: 0.0,
             }))
@@ -93,7 +95,7 @@ pub mod get_bitcoin {
         let mut i: i32;
         let mut min: f64;
         let mut max: f64;
-        i = 45;
+        i = 1;
         min = -1.0;
         max = -1.0;
 
@@ -111,6 +113,10 @@ pub mod get_bitcoin {
                         let btc_price_clone = Arc::clone(&btc_price);
                         let mut btc = btc_price_clone.write().unwrap();
                         btc.btctousd = price;
+
+                        if i == 1 {
+                            btc.startbtctousd = btc.btctousd;
+                        }
 
                         if min == -1.0 || min > price {
                             min = price;
