@@ -28,9 +28,9 @@ fn main() {
         if ordre == "data -d\n" {
             *should_stop.lock().unwrap() = true;
         }
-        if ordre == "f\n" {
+        /*if ordre == "f\n" {
             ihm::fenetre()
-        }
+        }*/
         ordre.clear();
         println!("Cryptobot : ");
         io::stdin().read_line(&mut ordre).expect("Echec de la lecture de l'entree utilisateur");

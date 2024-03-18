@@ -13,10 +13,12 @@ pub mod get_bitcoin {
         v_btctousdless: Vec<f64>,
         v_btctousdmore: Vec<f64>,
         v_timestamp: Vec<i64>,
+        v_differences: vec<i64>,
         btctousd: f64,
         startbtctousd: f64,
         btctousdless: f64,
         btctousdmore: f64
+        differences: f64,
     }
     impl btcprice {
     
@@ -26,10 +28,12 @@ pub mod get_bitcoin {
             v_btctousdless: Vec::new(),
             v_btctousdmore: Vec::new(),
             v_timestamp: Vec::new(),
+            v_differences: vec::new(),
             btctousd: 0.0,
             startbtctousd: 0.0,
             btctousdless: 0.0,
             btctousdmore: 0.0,
+            differences: 0.0,
             }))
         }
 
@@ -116,6 +120,10 @@ pub mod get_bitcoin {
 
                         if i == 1 {
                             btc.startbtctousd = btc.btctousd;
+                        }
+
+                        if btc.v_btctousd.len() > 0 {
+                            
                         }
 
                         if min == -1.0 || min > price {

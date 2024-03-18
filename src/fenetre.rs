@@ -1,6 +1,6 @@
 pub mod ihm {
 
-	extern crate gtk;
+	/*extern crate gtk;
 	extern crate cairo;
 	use gtk::prelude::*;
 	use gtk::{Window, WindowType, DrawingArea};
@@ -49,5 +49,5 @@ pub mod ihm {
 
 		// Exécuter la boucle principale de GTK
 		gtk::main();*/
-	}
+	}*/
 }
