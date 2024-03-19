@@ -1,12 +1,12 @@
+
 pub mod tendances {
 	pub struct pente {
 		initialized: bool,
-		croissant: bool,
 		size: i32,
 		start_price: f64,
 		start_timestamp: i64,
 		end_price: f64,
-		start_timestamp: i64,
+		end_timestamp: i64,
 		valeure_de_pente: f64,
     }
 	impl pente {
@@ -16,32 +16,24 @@ pub mod tendances {
 			if x1 == x2 {
 				pente{
 					initialized: true,
-					croissant: true,
 					size: 2,
 					start_price: y1,
 					start_timestamp: x1,
 					end_price: y2,
-					start_timestamp: x2,
+					end_timestamp: x2,
 					valeure_de_pente: 0.0,
 				}
 			} else {
-				let pentev = (y2 - y1) / (x2 - x1);
-				if pentev < 0 {
-					let pentedir = false;
-				} else {
-					let pentedir = true;
-				}
+				let pentev: f64 = (y2 - y1) as f64 / (x2 - x1) as f64;
 				pente{
 					initialized: true,
-					croissant: pentedir,
 					size: 2,
 					start_price: y1,
 					start_timestamp: x1,
 					end_price: y2,
-					start_timestamp: x2,
+					end_timestamp: x2,
 					valeure_de_pente: pentev,
 				}
-				
 			}
 		}
 	}
@@ -50,7 +42,7 @@ pub mod tendances {
 		if x1 == x2 {
 			0.0
 		} else {
-			(y2 - y1) / (x2 - x1)
+			(y2 - y1) as f64/ (x2 - x1) as f64
 		}
 	}
 }

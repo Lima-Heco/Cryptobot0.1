@@ -1,15 +1,17 @@
-mod get_btc;
-mod fenetre;
+//mod Data;
+mod Data {pub mod get_btc;}
+mod Screen {pub mod fenetre;}
+mod BFC_1 {pub mod Bot_read{ pub mod pente;}}
 
 use std::io;
-use crate::fenetre::ihm;
-use crate::get_btc::get_bitcoin;
+use Screen::fenetre::ihm;
+use Data::get_btc::get_bitcoin; 
 use std::sync::{Arc, Mutex, RwLock};
 use std::{thread, time};
 
 fn main() {
     let mut ordre = String::new();
-    let mut btc_price = get_bitcoin::btcprice::new();
+    let btc_price = get_bitcoin::btcprice::new();
     let should_stop = Arc::new(Mutex::new(false));
     let should_stop_clone = Arc::clone(&should_stop);
 

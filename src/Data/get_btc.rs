@@ -1,6 +1,4 @@
-
 pub mod get_bitcoin {
-
     use std::process::Command;
     use reqwest::blocking;
     use rusqlite::{params, Connection};
@@ -8,16 +6,18 @@ pub mod get_bitcoin {
     use std::{thread, time};
     use std::sync::{Arc, Mutex, RwLock};
 
+//-----------------------------STRUCT-------------------------------//
+
     pub struct btcprice {
         v_btctousd: Vec<f64>,
         v_btctousdless: Vec<f64>,
         v_btctousdmore: Vec<f64>,
         v_timestamp: Vec<i64>,
-        v_differences: vec<i64>,
+        v_differences: Vec<i64>,
         btctousd: f64,
         startbtctousd: f64,
         btctousdless: f64,
-        btctousdmore: f64
+        btctousdmore: f64,
         differences: f64,
     }
     impl btcprice {
@@ -28,7 +28,7 @@ pub mod get_bitcoin {
             v_btctousdless: Vec::new(),
             v_btctousdmore: Vec::new(),
             v_timestamp: Vec::new(),
-            v_differences: vec::new(),
+            v_differences: Vec::new(),
             btctousd: 0.0,
             startbtctousd: 0.0,
             btctousdless: 0.0,
@@ -44,7 +44,7 @@ pub mod get_bitcoin {
             self.v_timestamp.push(n4);
         }
     }
-
+//-----------------------------FN_GET_DATA--------------------------//
 
     fn create_database_and_store_data(btc_price: Arc<RwLock<btcprice>>) -> Result<(), Box<dyn std::error::Error>> {
         // Connexion à la base de données SQLite
@@ -88,12 +88,15 @@ pub mod get_bitcoin {
         println!("bilan : {}\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", timestamp, maxprice, price, minprice);
         Ok(())
     }
+
+//-----------------------------FV_FETCHBTC--------------------------//
     
     fn fetch_btcusdt() -> Result<serde_json::Value, reqwest::Error> {
         let response = reqwest::blocking::get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT")?;
         let data: serde_json::Value = response.json()?;
         Ok(data)
     }
+//-----------------------------FN_GET_BTC---------------------------//
 
     pub fn get_btc_in_data(btc_price: Arc<RwLock<btcprice>>, should_stop_clone: Arc<Mutex<bool>>) {
         let mut i: i32;
@@ -121,7 +124,7 @@ pub mod get_bitcoin {
                         if i == 1 {
                             btc.startbtctousd = btc.btctousd;
                         }
-
+                        
                         if btc.v_btctousd.len() > 0 {
                             
                         }
@@ -136,6 +139,7 @@ pub mod get_bitcoin {
                         }                     
                     }
                     println!("s: {}", i);
+                    println!("bilan :\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", max, price, min);
                     i += 1;
                     if i >= 45 {
                         let btc_price_clone = Arc::clone(&btc_price);
