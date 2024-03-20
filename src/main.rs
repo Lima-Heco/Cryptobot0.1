@@ -1,7 +1,7 @@
 //mod Data;
 mod Data {pub mod get_btc;}
 mod Screen {pub mod fenetre;}
-mod BFC_1 {pub mod Bot_read{ pub mod pente;}}
+mod BFC_1 {pub mod Bot_read{ pub mod pente; pub mod pente_view;}}
 
 use std::io;
 use Screen::fenetre::ihm;
