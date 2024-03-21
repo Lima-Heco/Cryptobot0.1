@@ -42,6 +42,7 @@ pub mod tendance_view {
             }
             return -1;
         }
+        //estime la pente potentielle apartire de la derniere. si elle est egale a l'ancienne reinitialisation et actualisation de l'ancienne
         pub fn get_potential() {
             
         }
