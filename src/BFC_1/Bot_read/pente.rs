@@ -1,13 +1,13 @@
 
 pub mod tendances {
 	pub struct pente {
-		initialized: bool,
-		size: i32,
-		start_price: f64,
-		start_timestamp: i64,
-		end_price: f64,
-		end_timestamp: i64,
-		valeure_de_pente: f64,
+		pub initialized: bool,
+		pub size: i32,
+		pub start_price: f64,
+		pub start_timestamp: i64,
+		pub end_price: f64,
+		pub end_timestamp: i64,
+		pub valeure_de_pente: f64,
     }
 	impl pente {
 		

@@ -9,16 +9,18 @@ pub mod get_bitcoin {
 //-----------------------------STRUCT-------------------------------//
 
     pub struct btcprice {
-        v_btctousd: Vec<f64>,
-        v_btctousdless: Vec<f64>,
-        v_btctousdmore: Vec<f64>,
-        v_timestamp: Vec<i64>,
-        v_differences: Vec<i64>,
-        btctousd: f64,
-        startbtctousd: f64,
-        btctousdless: f64,
-        btctousdmore: f64,
-        differences: f64,
+        pub v_btctousd: Vec<f64>,
+        pub v_btctousdless: Vec<f64>,
+        pub v_btctousdmore: Vec<f64>,
+        pub v_timestamp: Vec<i64>,
+        pub v_differences: Vec<i64>,
+        pub btctousd: f64,
+        pub startbtctousd: f64,
+        pub btctousdless: f64,
+        pub btctousdmore: f64,
+        pub differences: f64,
+        pub timestamp: i64,
+        pub next_time:bool,
     }
     impl btcprice {
     
@@ -34,6 +36,8 @@ pub mod get_bitcoin {
             btctousdless: 0.0,
             btctousdmore: 0.0,
             differences: 0.0,
+            timestamp: 0,
+            next_time: true,
             }))
         }
 
@@ -61,6 +65,16 @@ pub mod get_bitcoin {
             )",
             params![],
         )?;
+        if true {
+            let btc_price_clone = Arc::clone(&btc_price);
+            let mut price_guard = btc_price_clone.write().unwrap();
+            price_guard.timestamp = timestamp;
+            if price_guard.next_time == true {
+                price_guard.next_time = false;            
+            } else {
+                price_guard.next_time = true;
+            }
+        }
         let btc_price_clone = Arc::clone(&btc_price);
         let price = {
             let price_guard = btc_price_clone.read().unwrap();
