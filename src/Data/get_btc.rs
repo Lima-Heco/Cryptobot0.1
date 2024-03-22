@@ -99,7 +99,7 @@ pub mod get_bitcoin {
             params![price, maxprice, minprice, timestamp],
         )?;
 
-        println!("bilan : {}\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", timestamp, maxprice, price, minprice);
+        //println!("bilan : {}\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", timestamp, maxprice, price, minprice);
         Ok(())
     }
 
@@ -152,8 +152,8 @@ pub mod get_bitcoin {
                             btc.btctousdmore = max;
                         }                     
                     }
-                    println!("s: {}", i);
-                    println!("bilan :\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", max, price, min);
+                    //println!("s: {}", i);
+                    //println!("bilan :\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", max, price, min);
                     i += 1;
                     if i >= 45 {
                         let btc_price_clone = Arc::clone(&btc_price);

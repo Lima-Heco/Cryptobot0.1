@@ -20,7 +20,7 @@
 
 
 
-        println!("Cryptobot : ");
+        println!("---------------------Cryptobot : ");
         io::stdin().read_line(&mut ordre).expect("Echec de la lecture de l'entree utilisateur");
         while ordre != "exit\n" {
             if ordre == "data -s\n" {
@@ -29,6 +29,7 @@
                 let handle = thread::spawn(move || {
                     get_bitcoin::get_btc_in_data(btc_price, should_stop_data);
                 });
+                thread::sleep(time::Duration::from_secs(2));
             }
             if ordre == "data -d\n" {
                 *should_stop.lock().unwrap() = true;
@@ -41,6 +42,7 @@
                 let handle = thread::spawn(move || {
                     BFC_1_brain::bfcbrain(btc_price, should_stop_bot);
                 });
+                thread::sleep(time::Duration::from_secs(2));
             }
             if ordre == "bot -d\n" {
                 *should_stop2.lock().unwrap() = true;
@@ -48,12 +50,52 @@
                 *should_stop2.lock().unwrap() = false;
             }
 
+            if ordre == "play -t\n" {
+                let mut price = 0.0;
+                if true {
+                    let btc_price_clone = Arc::clone(&btc_price);
+                    let price_guard = btc_price_clone.read().unwrap();
+                    price = price_guard.btctousd;
+                }
+                thread::sleep(time::Duration::from_secs(90));
+                if true {
+                    let btc_price_clone = Arc::clone(&btc_price);
+                    let price_guard = btc_price_clone.read().unwrap();
+                    if price > price_guard.btctousd {
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                    } else {
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+                    }
+                }
+            }
+            if ordre == "play -b\n" {
+                let mut price = 0.0;
+                if true {
+                    let btc_price_clone = Arc::clone(&btc_price);
+                    let price_guard = btc_price_clone.read().unwrap();
+                    price = price_guard.btctousd;
+                }
+                thread::sleep(time::Duration::from_secs(90));
+                if true {
+                    let btc_price_clone = Arc::clone(&btc_price);
+                    let price_guard = btc_price_clone.read().unwrap();
+                    if price < price_guard.btctousd {
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                    } else {
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+                    }
+                }
+            }
+
             /*if ordre == "f\n" {
                 ihm::fenetre()
             }*/
             ordre.clear();
-            println!("Cryptobot : ");
+            println!("--------------------Cryptobot : ");
             io::stdin().read_line(&mut ordre).expect("Echec de la lecture de l'entree utilisateur");
         }
         *should_stop.lock().unwrap() = true;
+        *should_stop2.lock().unwrap() = true;
+        thread::sleep(time::Duration::from_secs(2));
+        println!("Merci!!");
     }
