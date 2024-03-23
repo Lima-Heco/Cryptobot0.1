@@ -52,11 +52,11 @@ pub mod get_bitcoin {
 
     fn create_database_and_store_data(btc_price: Arc<RwLock<btcprice>>) -> Result<(), Box<dyn std::error::Error>> {
         // Connexion à la base de données SQLite
-        let conn = Connection::open("bitcoin_database.db")?;
+        //let conn = Connection::open("bitcoin_database.db")?;
         let timestamp = chrono::Utc::now().timestamp();
         
         // Créer la table si elle n'existe pas déjà
-        conn.execute(
+        /*conn.execute(
             "CREATE TABLE IF NOT EXISTS bitcoin_data (
                 priceUsd REAL NOT NULL,
                 MAXpriceUsd REAL NOT NULL,
@@ -64,7 +64,7 @@ pub mod get_bitcoin {
                 timestamp INTEGER NOT NULL
             )",
             params![],
-        )?;
+        )?;*/
         if true {
             let btc_price_clone = Arc::clone(&btc_price);
             let mut price_guard = btc_price_clone.write().unwrap();
@@ -75,7 +75,7 @@ pub mod get_bitcoin {
                 price_guard.next_time = true;
             }
         }
-        let btc_price_clone = Arc::clone(&btc_price);
+        /*let btc_price_clone = Arc::clone(&btc_price);
         let price = {
             let price_guard = btc_price_clone.read().unwrap();
             price_guard.btctousd
@@ -89,15 +89,15 @@ pub mod get_bitcoin {
         let minprice = {
             let price_guard = btc_price_clone.read().unwrap();
             price_guard.btctousdless
-        };
-        if true {
+        };*/
+        /*if true {
             let mut btc = btc_price_clone.write().unwrap();
             btc.get_new(price, maxprice, minprice, timestamp);
-        }
-        conn.execute(
+        }*/
+        /*conn.execute(
             "INSERT INTO bitcoin_data (priceUsd, MAXpriceUsd, MINpriceUsd, timestamp) VALUES (?, ?, ?, ?)",
             params![price, maxprice, minprice, timestamp],
-        )?;
+        )?;*/
 
         //println!("bilan : {}\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", timestamp, maxprice, price, minprice);
         Ok(())

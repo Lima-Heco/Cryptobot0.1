@@ -22,6 +22,17 @@ pub mod tendance_view {
                 next_time: true,
             }
         }
+
+        pub fn swaptab(self: &mut Self){
+            let mut i = self.tableau.len() - 2;
+            while i != 0 {
+                self.tableau[i - 1] = self.tableau[i];
+                i -= 1;
+            }
+            self.tableau[0] = self.temp;
+            self.temp = pente::new();
+        }
+
         pub fn init_new_slope(self: &mut Self, btc_price: Arc<RwLock<get_bitcoin::btcprice>>) -> i32{
             let btc_price_clone = Arc::clone(&btc_price);
             let price_guard = btc_price_clone.read().unwrap();
@@ -42,7 +53,6 @@ pub mod tendance_view {
             }
             return -1;
         }
-        //estime la pente potentielle apartire de la derniere. si elle est egale a l'ancienne reinitialisation et actualisation de l'ancienne
         pub fn get_potential(self: &mut Self, btc_price: Arc<RwLock<get_bitcoin::btcprice>>) {
             let mut time = true;
             if self.temp.initialized == false {
@@ -65,11 +75,12 @@ pub mod tendance_view {
             {
                 let pourcentage_dacceptaition = self.tableau[0].valeure_de_pente * 10.0 / 100.0;
                 if self.temp.valeure_de_pente >= (self.tableau[0].valeure_de_pente - pourcentage_dacceptaition) && self.temp.valeure_de_pente <= (self.tableau[0].valeure_de_pente + pourcentage_dacceptaition) {
-                    //met a joure le dernier element du tableau et reinitialise temp.
+                    self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
+                    self.temp = pente::new();
                 } else if self.temp.size > 3 {
-                    //decale les elements du tableau et l'ajoute au debut.
+                    self.swaptab();
                 } else {
-                    //temp size += 1
+                    self.temp.size += 1;
                 }
             }
         }
