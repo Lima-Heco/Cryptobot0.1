@@ -6,8 +6,8 @@ pub mod tendance_view {
     use std::clone::Clone;
 
     pub struct BFC_1_view {
-        tableau: [pente; 3],
-        temp: pente,
+        pub tableau: [pente; 3],
+        pub temp: pente,
         next_time: bool,
     }
     
@@ -78,7 +78,7 @@ pub mod tendance_view {
                 self.tableau[0].end_timestamp = price_guard.timestamp;
                 self.tableau[0].end_price = price_guard.btctousd;
                 self.tableau[0].size += 1;
-                self.tableau[0].valeure_de_pente = pente::calculate_slope(self.tableau[0].start_timestamp, self.tableau[0].start_price, self.tableau[0].end_timestamp, self.tableau[0].end_price);
+                self.tableau[0].valeure_de_pente = pente::calculate_slope(0, self.tableau[0].start_price, self.tableau[0].size, self.tableau[0].end_price);
                 println!("initialized");
                 return 1;
             }
@@ -86,6 +86,7 @@ pub mod tendance_view {
         }
         pub fn get_potential(self: &mut Self, btc_price: Arc<RwLock<get_bitcoin::btcprice>>) {
             let mut time = true;
+            let mut cop = pente::new();
             if self.temp.initialized == false {
                 self.temp.start_price = self.tableau[0].end_price;
                 self.temp.start_timestamp = self.tableau[0].end_timestamp;
@@ -101,14 +102,24 @@ pub mod tendance_view {
             if self.temp.size == 0 {
                 self.temp.size = 1;
             }
-            self.temp.valeure_de_pente = pente::calculate_slope(self.temp.start_timestamp, self.temp.start_price, self.temp.end_timestamp, self.temp.end_price);
+            self.temp.valeure_de_pente = pente::calculate_slope(0, self.temp.start_price, self.temp.size, self.temp.end_price);
+            cop.init(0, self.tableau[0].start_price, self.temp.size + self.tableau[0].size - 1, self.temp.end_price, self.temp.size + self.tableau[0].size - 1);
             if self.next_time != time
             {
                 let pourcentage_dacceptaition = self.tableau[0].valeure_de_pente * 10.0 / 100.0;
-                if self.temp.valeure_de_pente >= (self.tableau[0].valeure_de_pente - pourcentage_dacceptaition) && self.temp.valeure_de_pente <= (self.tableau[0].valeure_de_pente + pourcentage_dacceptaition) {
-                    self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
-                    self.temp = pente::new();
-                } else if self.temp.size > 3 {
+                if cop.valeure_de_pente >= (self.tableau[0].valeure_de_pente - 30.0) && cop.valeure_de_pente <= (self.tableau[0].valeure_de_pente + 30.0) {
+                    if cop.valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0 {
+                        self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
+                        self.temp = pente::new();
+                    } else if cop.valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0{
+                        self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
+                        self.temp = pente::new();
+                    } else if self.temp.size > 2 {
+                        self.swaptab();
+                    } else {
+                        self.temp.size += 1;
+                    }
+                } else if self.temp.size > 2 {
                     self.swaptab();
                 } else {
                     self.temp.size += 1;

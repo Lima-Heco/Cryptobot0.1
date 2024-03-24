@@ -1,7 +1,7 @@
 //---------------------------Mod and use--------------------//
     mod Data {pub mod get_btc;}
     mod Screen {pub mod fenetre;}
-    mod BFC_1 {pub mod brain; pub mod Bot_read{ pub mod pente; pub mod pente_view;}}
+    mod BFC_1 {pub mod brain; pub mod Bot_read{ pub mod pente; pub mod pente_view;} pub mod Bot_mind{pub mod algo_1;}}
 
     use Screen::fenetre::ihm;
     use Data::get_btc::get_bitcoin; 

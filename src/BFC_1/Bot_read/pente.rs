@@ -3,7 +3,7 @@ pub mod tendances {
 	use std::clone::Clone;
 	pub struct pente {
 		pub initialized: bool,
-		pub size: i32,
+		pub size: i64,
 		pub start_price: f64,
 		pub start_timestamp: i64,
 		pub end_price: f64,
@@ -57,22 +57,22 @@ pub mod tendances {
 			}
 		}
 
-		pub fn init(self: &mut Self, x1: i64, y1: f64, x2: i64, y2: f64, s: i32) {
+		pub fn init(self: &mut Self, x1: i64, y1: f64, x2: i64, y2: f64, s: i64) {
 			self.initialized = true;
 			self.size = s;
 			self.start_price = y1;
 			self.start_timestamp = x1;
 			self.end_price = y2;
 			self.end_timestamp = x2;
-			self.valeure_de_pente = Self::calculate_slope(x1, y1, x2, y2);
+			self.valeure_de_pente = Self::calculate_slope(0, y1, s, y2);
 		}
 
-		pub fn update_slope(self: &mut Self, x2: i64, y2: f64, s: i32)
+		pub fn update_slope(self: &mut Self, x2: i64, y2: f64, s: i64)
 		{
 			self.end_price = y2;
 			self.end_timestamp = x2;
-			self.size = s;
-			self.valeure_de_pente = Self::calculate_slope(self.start_timestamp, self.start_price, x2, y2);
+			self.size += s;
+			self.valeure_de_pente = Self::calculate_slope(0, self.start_price, self.size, y2);
 		}
 
 	}
