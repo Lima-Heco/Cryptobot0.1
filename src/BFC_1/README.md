@@ -3,4 +3,4 @@
 | Taches | etat |
 | --------- | --------- |
 | Initialiser cerveau  | 0%  |
-| initialiser Pentes   | 30%  |
+| initialiser Pentes   | 70%  |

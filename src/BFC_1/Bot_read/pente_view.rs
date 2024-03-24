@@ -3,6 +3,7 @@ pub mod tendance_view {
     use crate::Data::get_btc::get_bitcoin; 
     use std::sync::{Arc, Mutex, RwLock};
     use std::{thread, time, io};
+    use std::clone::Clone;
 
     pub struct BFC_1_view {
         tableau: [pente; 3],
@@ -23,14 +24,44 @@ pub mod tendance_view {
             }
         }
 
-        pub fn swaptab(self: &mut Self){
-            let mut i = self.tableau.len() - 2;
+        pub fn swaptab(self: &mut Self) {
+            let mut i = self.tableau.len() - 1;
+            println!("size of tab : {}", i);
             while i != 0 {
-                self.tableau[i - 1] = self.tableau[i];
+                self.tableau[i] = self.tableau[i - 1].clone();
                 i -= 1;
             }
-            self.tableau[0] = self.temp;
+            self.tableau[0] = self.temp.clone();
             self.temp = pente::new();
+        }
+
+        pub fn affiche_structure(self: &mut Self) {
+            let mut temp = "0";
+            if self.tableau[2].valeure_de_pente < 0.0 {
+                temp = "\x1b[31m"
+            } else {
+                temp = "\x1b[32m"
+            }
+            println!("{} pente n3: \n depart: {}\n arrivee: {}\n taille: {}\n pente: {}\x1b[0m\n", temp, self.tableau[2].start_price, self.tableau[2].end_price, self.tableau[2].size, self.tableau[2].valeure_de_pente);
+            if self.tableau[1].valeure_de_pente < 0.0 {
+                temp = "\x1b[31m"
+            } else {
+                temp = "\x1b[32m"
+            }
+            println!("{} pente n2: \n depart: {}\n arrivee: {}\n taille: {}\n pente: {}\x1b[0m\n", temp, self.tableau[1].start_price, self.tableau[1].end_price, self.tableau[1].size, self.tableau[1].valeure_de_pente);
+            if self.tableau[0].valeure_de_pente < 0.0 {
+                temp = "\x1b[31m"
+            } else {
+                temp = "\x1b[32m"
+            }
+            println!("{} pente n1: \n depart: {}\n arrivee: {}\n taille: {}\n pente: {}\x1b[0m\n", temp, self.tableau[0].start_price, self.tableau[0].end_price, self.tableau[0].size, self.tableau[0].valeure_de_pente);
+            if self.temp.valeure_de_pente < 0.0 {
+                temp = "\x1b[31m"
+            } else {
+                temp = "\x1b[32m"
+            }
+            println!("{} pente n0: \n depart: {}\n arrivee: {}\n taille: {}\n pente: {}\x1b[0m\n", temp, self.temp.start_price, self.temp.end_price, self.temp.size, self.temp.valeure_de_pente);
+
         }
 
         pub fn init_new_slope(self: &mut Self, btc_price: Arc<RwLock<get_bitcoin::btcprice>>) -> i32{
@@ -67,8 +98,8 @@ pub mod tendance_view {
                 self.temp.end_price = price_guard.btctousd;
                 time = price_guard.next_time;
             }
-            if self.temp.size < 2 {
-                self.temp.size = 2;
+            if self.temp.size == 0 {
+                self.temp.size = 1;
             }
             self.temp.valeure_de_pente = pente::calculate_slope(self.temp.start_timestamp, self.temp.start_price, self.temp.end_timestamp, self.temp.end_price);
             if self.next_time != time
@@ -82,6 +113,8 @@ pub mod tendance_view {
                 } else {
                     self.temp.size += 1;
                 }
+                self.affiche_structure();
+                self.next_time = time;
             }
         }
     }

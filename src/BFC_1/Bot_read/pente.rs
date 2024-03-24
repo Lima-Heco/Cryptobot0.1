@@ -1,5 +1,6 @@
 
 pub mod tendances {
+	use std::clone::Clone;
 	pub struct pente {
 		pub initialized: bool,
 		pub size: i32,
@@ -74,6 +75,20 @@ pub mod tendances {
 			self.valeure_de_pente = Self::calculate_slope(self.start_timestamp, self.start_price, x2, y2);
 		}
 
+	}
+	impl Clone for pente {
+		fn clone(&self) -> Self {
+			// Créez une nouvelle instance de `pente` avec les mêmes valeurs que la structure actuelle
+			pente {
+				initialized: self.initialized,
+				size: self.size,
+				start_price: self.start_price,
+				start_timestamp: self.start_timestamp,
+				end_price: self.end_price,
+				end_timestamp: self.end_timestamp,
+				valeure_de_pente: self.valeure_de_pente,
+			}
+		}
 	}
 
 
