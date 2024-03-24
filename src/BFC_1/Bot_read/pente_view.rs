@@ -24,6 +24,10 @@ pub mod tendance_view {
             }
         }
 
+        pub fn is_init(self: &mut Self) -> bool {
+            true
+        }
+
         pub fn swaptab(self: &mut Self) {
             let mut i = self.tableau.len() - 1;
             println!("size of tab : {}", i);
@@ -106,23 +110,20 @@ pub mod tendance_view {
             cop.init(0, self.tableau[0].start_price, self.temp.size + self.tableau[0].size - 1, self.temp.end_price, self.temp.size + self.tableau[0].size - 1);
             if self.next_time != time
             {
+                self.temp.size += 1;
                 let pourcentage_dacceptaition = self.tableau[0].valeure_de_pente * 10.0 / 100.0;
-                if cop.valeure_de_pente >= (self.tableau[0].valeure_de_pente - 30.0) && cop.valeure_de_pente <= (self.tableau[0].valeure_de_pente + 30.0) {
+                if cop.valeure_de_pente >= (self.tableau[0].valeure_de_pente - 35.0) && cop.valeure_de_pente <= (self.tableau[0].valeure_de_pente + 35.0) {
                     if cop.valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0 {
                         self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
                         self.temp = pente::new();
-                    } else if cop.valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0{
+                    } else if cop.valeure_de_pente > 0.0 && self.temp.valeure_de_pente > 0.0{
                         self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
                         self.temp = pente::new();
                     } else if self.temp.size > 2 {
                         self.swaptab();
-                    } else {
-                        self.temp.size += 1;
                     }
                 } else if self.temp.size > 2 {
                     self.swaptab();
-                } else {
-                    self.temp.size += 1;
                 }
                 self.affiche_structure();
                 self.next_time = time;
