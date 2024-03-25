@@ -3,33 +3,42 @@ pub mod BFC_1_mind {
     use std::sync::{Arc, Mutex, RwLock};
     use std::{thread, time, io};
 	use crate::get_bitcoin;
+	use crate::marqueures;
 
-	pub fn select_algo(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>)
+	pub fn select_algo(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>)
 	{
 		let wait_cl = Arc::clone(&wait);
 		let btc_price_clone = Arc::clone(&btc_price);
-		findV1(view, btc_price_clone, wait_cl);
+		let info = Arc::clone(&infobot);
+		findV1(view, btc_price_clone, wait_cl, info);
 //--------------------------------------------------------------------------------------
 		let wait_cl = Arc::clone(&wait);
 		let btc_price_clone = Arc::clone(&btc_price);
-		findV2(view, btc_price_clone, wait_cl);
+		let info = Arc::clone(&infobot);
+		findV2(view, btc_price_clone, wait_cl, info);
 //--------------------------------------------------------------------------------------
 		let wait_cl = Arc::clone(&wait);
 		let btc_price_clone = Arc::clone(&btc_price);
-		findP1(view, btc_price_clone, wait_cl);
+		let info = Arc::clone(&infobot);
+		findP1(view, btc_price_clone, wait_cl, info);
 //--------------------------------------------------------------------------------------
 		let wait_cl = Arc::clone(&wait);
 		let btc_price_clone = Arc::clone(&btc_price);
-		findIVP1(view, btc_price_clone, wait_cl);
+		let info = Arc::clone(&infobot);
+		findIVP1(view, btc_price_clone, wait_cl, info);
 	}
 
-	pub fn findV1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>) -> i64{
+	pub fn findV1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64{
 		let wait_cl = Arc::clone(&wait);
+		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
 		if view.tableau[1].valeure_de_pente > 0.0 && view.tableau[0].valeure_de_pente < -20.0 && view.tableau[0].valeure_de_pente > -35.0 && view.tableau[0].size > 3 && view.temp.valeure_de_pente > 30.0 && view.temp.size >= 2 && *wait_cl.lock().unwrap() == false{
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
 				let wait_cl = Arc::clone(&wait);
+				let info = Arc::clone(&infobot);
+				let mut inf = info.lock().unwrap();
+				inf.findv1_try += 1;
 				*wait_cl.lock().unwrap() = true;
 				let mut price = 0.0;
                 if true {
@@ -41,10 +50,12 @@ pub mod BFC_1_mind {
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
-                    if price > price_guard.btctousd {
-                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                    if price_guard.btctousd < price {
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
+						let info = Arc::clone(&infobot);
+						inf.findv1_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
@@ -55,13 +66,17 @@ pub mod BFC_1_mind {
 		}
 		return 0; 
 	}
-	pub fn findV2(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>) -> i64{
+	pub fn findV2(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64{
 		let wait_cl = Arc::clone(&wait);
 		let btc_price_clone = Arc::clone(&btc_price);
+		let info = Arc::clone(&infobot);
 		if view.tableau[1].valeure_de_pente > 0.0 && view.tableau[0].valeure_de_pente < -35.0 && view.tableau[0].size > 4 && view.temp.valeure_de_pente > 25.0 && view.temp.size >= 3 && *wait_cl.lock().unwrap() == false && view.tableau[1].valeure_de_pente < 25.0{
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
 				let wait_cl = Arc::clone(&wait);
+				let info = Arc::clone(&infobot);
+				let mut inf = info.lock().unwrap();
+				inf.findv2_try += 1;
 				*wait_cl.lock().unwrap() = true;
 				let mut price = 0.0;
                 if true {
@@ -74,9 +89,11 @@ pub mod BFC_1_mind {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
                     if price > price_guard.btctousd {
-                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+						let info = Arc::clone(&infobot);
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
+						inf.findv2_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
@@ -87,13 +104,17 @@ pub mod BFC_1_mind {
 		} 
 		return 0;
 	}
-	pub fn findP1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>) -> i64 {
+	pub fn findP1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64 {
 		let wait_cl = Arc::clone(&wait);
+		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
 		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > 150.0 && view.tableau[0].size > 4 && view.tableau[0].size < 7 && *wait_cl.lock().unwrap() == false {
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
 				let wait_cl = Arc::clone(&wait);
+				let info = Arc::clone(&infobot);
+				let mut inf = info.lock().unwrap();
+				inf.findivp1_try += 1;
 				*wait_cl.lock().unwrap() = true;
 				let mut price = 0.0;
                 if true {
@@ -106,9 +127,11 @@ pub mod BFC_1_mind {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
                     if price > price_guard.btctousd {
-                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+						let info = Arc::clone(&infobot);
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
+						inf.findivp1_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
@@ -119,14 +142,18 @@ pub mod BFC_1_mind {
 		} 
 		return 0;
 	}
-	pub fn findIVP1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>) -> i64 {
+	pub fn findIVP1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64 {
 		let wait_cl = Arc::clone(&wait);
+		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
 		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -160.0 && view.tableau[0].size > 4 && view.tableau[0].size < 7 && *wait_cl.lock().unwrap() == false {
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
 				let wait_cl = Arc::clone(&wait);
+				let info = Arc::clone(&infobot);
 				*wait_cl.lock().unwrap() = true;
+				let mut inf = info.lock().unwrap();
+				inf.findp1_try += 1;
 				let mut price = 0.0;
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
@@ -137,10 +164,12 @@ pub mod BFC_1_mind {
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
-                    if price > price_guard.btctousd {
-                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                    if price < price_guard.btctousd {
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+						let info = Arc::clone(&infobot);
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
+						inf.findp1_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);

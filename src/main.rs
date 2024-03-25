@@ -1,18 +1,20 @@
 //---------------------------Mod and use--------------------//
     mod Data {pub mod get_btc;}
     mod Screen {pub mod fenetre;}
-    mod BFC_1 {pub mod brain; pub mod Bot_read{ pub mod pente; pub mod pente_view;} pub mod Bot_mind{pub mod algo_1;}}
+    mod BFC_1 {pub mod brain; pub mod Bot_read{ pub mod pente; pub mod pente_view;} pub mod Bot_mind{pub mod algo_1; pub mod analyse;}}
 
     use Screen::fenetre::ihm;
     use Data::get_btc::get_bitcoin; 
     use std::sync::{Arc, Mutex, RwLock};
     use std::{thread, time, io};
     use BFC_1::brain::BFC_1_brain;
+    use crate::BFC_1::Bot_mind::analyse::analyseBFC_1::marqueures;
 //---------------------------main---------------------------//
 
     fn main() {
         let mut ordre = String::new();
         let btc_price = get_bitcoin::btcprice::new();
+        let infobot = Arc::new(Mutex::new(marqueures::new()));
         let should_stop = Arc::new(Mutex::new(false));
         let should_stop_data = Arc::clone(&should_stop);
         let should_stop2 = Arc::new(Mutex::new(false));
@@ -38,9 +40,10 @@
             }
             if ordre == "bot -s\n" {
                 let should_stop_bot = Arc::clone(&should_stop2);
+                let info = Arc::clone(&infobot);
                 let btc_price = Arc::clone(&btc_price);
                 let handle = thread::spawn(move || {
-                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot);
+                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info);
                 });
                 thread::sleep(time::Duration::from_secs(2));
             }
@@ -62,11 +65,17 @@
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
                     if price > price_guard.btctousd {
-                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
                     }
                 }
+            }
+            if ordre == "info\n" {
+                let info = Arc::clone(&infobot);
+                let mut test = info.lock().unwrap();
+                test.print();
+                thread::sleep(time::Duration::from_secs(2));
             }
             if ordre == "play -b\n" {
                 let mut price = 0.0;
@@ -80,9 +89,9 @@
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
                     if price < price_guard.btctousd {
-                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n")
+                        println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
                     }
                 }
             }
