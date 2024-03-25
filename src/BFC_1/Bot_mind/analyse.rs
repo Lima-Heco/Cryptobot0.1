@@ -28,19 +28,27 @@ pub mod analyseBFC_1 {
             println!("      findv1:     tentatives: {} reussites: {}\n", self.findv1_try, self.findv1_succes);
             if self.findv1_try > 0 && self.findv1_succes > 0{
                 println!("           pourcentage de reussites: {}%\n\n", (self.findv1_succes * 100) / self.findv1_try);
+            } else {
+                println!("           pourcentage de reussites: 0%\n\n");
             }
             println!("      findv2:     tentatives: {} reussites: {}\n", self.findv2_try, self.findv2_succes);
             if self.findv2_try > 0 && self.findv2_succes > 0{
                 println!("           pourcentage de reussites: {}%\n\n", (self.findv2_succes * 100) / self.findv2_try);
+            } else {
+                println!("           pourcentage de reussites: 0%\n\n");
             }
             println!("      findivp1:     tentatives: {} reussites: {}\n", self.findivp1_try, self.findivp1_succes);
             if self.findivp1_try > 0 && self.findivp1_succes > 0{
                 println!("           pourcentage de reussites: {}%\n\n", (self.findivp1_succes * 100) / self.findivp1_try);
+            } else {
+                println!("           pourcentage de reussites: 0%\n\n");
             }
             println!("      findp1:     tentatives: {} reussites: {}\n", self.findp1_try, self.findp1_succes);
             if self.findp1_try > 0 && self.findp1_succes > 0{
                 println!("           pourcentage de reussites: {}%\n\n", (self.findp1_succes * 100) / self.findp1_try);
-     }
-           }
+            } else {
+                println!("           pourcentage de reussites: 0%\n\n");
+            }
+        }
     }
 }
