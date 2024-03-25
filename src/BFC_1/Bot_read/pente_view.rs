@@ -112,11 +112,13 @@ pub mod tendance_view {
             {
                 self.temp.size += 1;
                 let pourcentage_dacceptaition = self.tableau[0].valeure_de_pente * 10.0 / 100.0;
-                if cop.valeure_de_pente >= (self.tableau[0].valeure_de_pente - 35.0) && cop.valeure_de_pente <= (self.tableau[0].valeure_de_pente + 35.0) {
-                    if cop.valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0 {
+                if self.temp.valeure_de_pente > -10.0 && self.temp.valeure_de_pente < 10.0 && self.temp.size < 7{
+                    println!("wait");
+                } else if cop.valeure_de_pente >= (self.tableau[0].valeure_de_pente - 30.0) && cop.valeure_de_pente <= (self.tableau[0].valeure_de_pente + 30.0) {
+                    if self.tableau[0].valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0 {
                         self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
                         self.temp = pente::new();
-                    } else if cop.valeure_de_pente > 0.0 && self.temp.valeure_de_pente > 0.0{
+                    } else if self.tableau[0].valeure_de_pente > 0.0 && self.temp.valeure_de_pente > 0.0{
                         self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
                         self.temp = pente::new();
                     } else if self.temp.size > 2 {

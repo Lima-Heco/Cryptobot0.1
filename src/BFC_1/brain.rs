@@ -1,7 +1,7 @@
 pub mod BFC_1_brain {
     use crate::Data::get_btc::get_bitcoin;
     use crate::BFC_1::Bot_read::pente_view::tendance_view::BFC_1_view;
-    use crate::BFC_1::Bot_mind::algo_1::BFC_1_mind::findV1;
+    use crate::BFC_1::Bot_mind::algo_1::BFC_1_mind::select_algo;
 
     // /use crate::BFC_1::Bot_mind::algo_1;
 
@@ -22,10 +22,10 @@ pub mod BFC_1_brain {
         println!("Demmarage...");
         loop {
             let btc_price_clone = Arc::clone(&btc_price);
-            view.get_potential(btc_price_clone);
+            &view.get_potential(btc_price_clone);
             let btc_price_clone = Arc::clone(&btc_price);
             let wait_cl = Arc::clone(&wait);
-            findV1(&view, btc_price_clone, wait_cl);
+            select_algo(&view, btc_price_clone, wait_cl);
             if *should_stop_clone.lock().unwrap() {
                 break;
             }
