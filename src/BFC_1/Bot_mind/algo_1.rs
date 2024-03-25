@@ -101,7 +101,7 @@ pub mod BFC_1_mind {
                     let price_guard = btc_price_clone.read().unwrap();
                     price = price_guard.btctousd;
                 }
-                thread::sleep(time::Duration::from_secs(180));
+                thread::sleep(time::Duration::from_secs(90));
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
@@ -133,7 +133,7 @@ pub mod BFC_1_mind {
                     let price_guard = btc_price_clone.read().unwrap();
                     price = price_guard.btctousd;
                 }
-                thread::sleep(time::Duration::from_secs(180));
+                thread::sleep(time::Duration::from_secs(90));
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
