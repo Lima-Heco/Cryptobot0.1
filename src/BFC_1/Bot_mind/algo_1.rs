@@ -114,7 +114,7 @@ pub mod BFC_1_mind {
 				let wait_cl = Arc::clone(&wait);
 				let info = Arc::clone(&infobot);
 				let mut inf = info.lock().unwrap();
-				inf.findivp1_try += 1;
+				inf.findp1_try += 1;
 				*wait_cl.lock().unwrap() = true;
 				let mut price = 0.0;
                 if true {
@@ -131,7 +131,7 @@ pub mod BFC_1_mind {
                     } else {
 						let info = Arc::clone(&infobot);
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
-						inf.findivp1_succes += 1;
+						inf.findp1_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
@@ -153,7 +153,7 @@ pub mod BFC_1_mind {
 				let info = Arc::clone(&infobot);
 				*wait_cl.lock().unwrap() = true;
 				let mut inf = info.lock().unwrap();
-				inf.findp1_try += 1;
+				inf.findivp1_try += 1;
 				let mut price = 0.0;
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
@@ -169,7 +169,7 @@ pub mod BFC_1_mind {
                     } else {
 						let info = Arc::clone(&infobot);
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
-						inf.findp1_succes += 1;
+						inf.findivp1_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
