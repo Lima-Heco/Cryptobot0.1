@@ -112,7 +112,8 @@ pub mod tendance_view {
             {
                 self.temp.size += 1;
                 let pourcentage_dacceptaition = self.tableau[0].valeure_de_pente * 10.0 / 100.0;
-                if self.temp.valeure_de_pente > -10.0 && self.temp.valeure_de_pente < 10.0 && self.temp.size < 7{
+                if self.temp.valeure_de_pente > -6.0 && self.temp.valeure_de_pente < 6.0 && self.temp.size < 9 || (cop.valeure_de_pente > 0.0 && self.temp.valeure_de_pente < 0.0) && self.temp.size < 6
+                        || (cop.valeure_de_pente > 0.0 && self.temp.valeure_de_pente < 0.0) && self.temp.size < 6 {
                     println!("wait");
                 } else if cop.valeure_de_pente >= (self.tableau[0].valeure_de_pente - 30.0) && cop.valeure_de_pente <= (self.tableau[0].valeure_de_pente + 30.0) {
                     if self.tableau[0].valeure_de_pente < 0.0 && self.temp.valeure_de_pente < 0.0 {
@@ -121,10 +122,10 @@ pub mod tendance_view {
                     } else if self.tableau[0].valeure_de_pente > 0.0 && self.temp.valeure_de_pente > 0.0{
                         self.tableau[0].update_slope(self.temp.end_timestamp, self.temp.end_price, self.temp.size - 1);
                         self.temp = pente::new();
-                    } else if self.temp.size > 2 {
+                    } else if self.temp.size > 4 {
                         self.swaptab();
                     }
-                } else if self.temp.size > 2 {
+                } else if self.temp.size > 4 {
                     self.swaptab();
                 }
                 self.affiche_structure();

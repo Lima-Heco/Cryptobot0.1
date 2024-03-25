@@ -155,7 +155,7 @@ pub mod get_bitcoin {
                     //println!("s: {}", i);
                     //println!("bilan :\n    Max: \x1b[32m{}\x1b[0m\n    Courrant: {}\n    Min: \x1b[31m{}\x1b[0m", max, price, min);
                     i += 1;
-                    if i >= 45 {
+                    if i >= 20 {
                         let btc_price_clone = Arc::clone(&btc_price);
                         let _ = create_database_and_store_data(btc_price_clone);
                         i = 1;
