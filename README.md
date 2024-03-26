@@ -6,6 +6,18 @@
 | implementer l'IHM   | 5%  |
 | initialiser le multithread   | 100%  |
 
+# informations
+
+findivp1 et findivp2 etait a l'envers !!
+
+cela posait probleme a findivp2 mais findivp1 a l'aire de s'en accomoder:
+
+          findivp1:     tentatives: 94 reussites: 58
+
+           pourcentage de reussites: 61%
+
+le pourcentage de reussite a stagner entre 61% et 67 % pendant pllus de 4 h !!
+
 # idees:
 
 Reconaissance de paterne qui va rendre propice un autre paterne.

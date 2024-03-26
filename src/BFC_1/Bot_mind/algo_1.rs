@@ -130,7 +130,7 @@ pub mod BFC_1_mind {
 		let wait_cl = Arc::clone(&wait);
 		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
-		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -160.0
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 <= -160.0
 						&& view.tableau[0].size > 5 && view.tableau[0].size < 18
 						&& view.temp.valeure_de_pente < 0.0
 						&& view.tableau[1].valeure_de_pente > 0.0 && view.tableau[1].size > 4 && view.tableau[1].size < 7
