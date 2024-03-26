@@ -6,6 +6,32 @@
 | implementer l'IHM   | 5%  |
 | initialiser le multithread   | 100%  |
 
+# idees:
+
+Reconaissance de paterne qui va rendre propice un autre paterne.
+
+     exemple :
+          pique de plus de 250 sur moins de 30 elements va entrainer un terrain propice au findivp1 et findivp2.
+
+Ce proceder va certainement focaliser les situations gagnantes.
+
+-----------------------------------------------------------------------------------------
+
+selection d'un seul paterne par bot via commande.
+
+          favorisera la creation de plusieurs bots.
+
+-----------------------------------------------------------------------------------------
+
+amelioration du bot pour lui apprendre a gerer lui meme sa frequence d'enregistrement.
+
+          permettera la determination de differents bots et de leurs utilitees.
+
+-----------------------------------------------------------------------------------------
+
+NETTOYAGE CODE !!!!
+
+          rendre le code plus lisible ameliorera drastiquement sa rapidite d'evolution.
 
 # comptrendu N1: 
 # FIN du premier test de BFC_1 Resultat: CORRECTE

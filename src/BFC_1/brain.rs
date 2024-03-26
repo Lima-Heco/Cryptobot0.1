@@ -9,7 +9,7 @@ pub mod BFC_1_brain {
     use std::sync::{Arc, Mutex, RwLock};
     use std::{thread, time, io};
 
-    pub fn bfcbrain(btc_price: Arc<RwLock<get_bitcoin::btcprice>>, should_stop_clone: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) {
+    pub fn bfcbrain(btc_price: Arc<RwLock<get_bitcoin::btcprice>>, should_stop_clone: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>, selected: i32) {
         println!("bot started...");
         let mut view = BFC_1_view::new();
         let wait = Arc::new(Mutex::new(false));
@@ -27,7 +27,7 @@ pub mod BFC_1_brain {
             &view.get_potential(btc_price_clone);
             let btc_price_clone = Arc::clone(&btc_price);
             let wait_cl = Arc::clone(&wait);
-            select_algo(&view, btc_price_clone, wait_cl, info);
+            select_algo(&view, btc_price_clone, wait_cl, info, selected);
             if *should_stop_clone.lock().unwrap() {
                 break;
             }
