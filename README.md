@@ -20,6 +20,10 @@ le pourcentage de reussite a stagner entre 61% et 67 % pendant pllus de 4 h !!
 
 # idees:
 
+          J'ai remarquer que les paterns sont plus efficace dans certains contexte. il faut alors que je cree une espece de chef d'orchestre
+
+--------------------------------------------------------------
+
 Reconaissance de paterne qui va rendre propice un autre paterne.
 
      exemple :
