@@ -85,9 +85,9 @@ pub mod BFC_1_mind {
 		let wait_cl = Arc::clone(&wait);
 		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
-		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -155.0
-						&& view.tableau[0].size > 6 && view.tableau[0].size < 18
-						&& view.temp.valeure_de_pente < 0.0
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -170.0
+						&& ((view.tableau[0].size > 6 && view.tableau[0].size < 25) || (view.tableau[0].size > 4 && view.tableau[0].size < 25 && view.tableau[0].valeure_de_pente < 0.0))
+						&& view.temp.valeure_de_pente < -10.0
 						&& *wait_cl.lock().unwrap() == false {
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
@@ -140,8 +140,7 @@ pub mod BFC_1_mind {
 			let mut inf = info.lock().unwrap();
 			inf.propice = 1;	
 		}
-		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 <= -120.0
-						&& view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -160.0
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 <= -100.0
 						&& view.tableau[0].size > 5 && view.tableau[0].size < 18
 						&& view.temp.valeure_de_pente < 0.0
 						&& view.tableau[2].start_price - 20.0 > view.tableau[1].end_price
