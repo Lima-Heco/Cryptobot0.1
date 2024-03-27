@@ -9,6 +9,7 @@ pub mod analyseBFC_1 {
         pub findivp2_succes: i64,
         pub findp1_try: i64,
         pub findp1_succes: i64,
+        pub propice: i32,
     }
     impl marqueures {
         pub fn new() -> Self {
@@ -21,6 +22,7 @@ pub mod analyseBFC_1 {
                 findivp2_succes: 0,
                 findp1_try: 0,
                 findp1_succes: 0,
+                propice: 0,
             }
         }
         pub fn print(self: &mut Self) {

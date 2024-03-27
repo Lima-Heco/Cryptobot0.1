@@ -85,7 +85,7 @@ pub mod BFC_1_mind {
 		let wait_cl = Arc::clone(&wait);
 		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
-		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -160.0
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -155.0
 						&& view.tableau[0].size > 6 && view.tableau[0].size < 18
 						&& view.temp.valeure_de_pente < 0.0
 						&& *wait_cl.lock().unwrap() == false {
@@ -130,11 +130,24 @@ pub mod BFC_1_mind {
 		let wait_cl = Arc::clone(&wait);
 		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
-		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 <= -160.0
+		let mut ispropice: i32 = 0;
+		if true {
+			let mut inf = info.lock().unwrap();
+			ispropice = inf.propice;
+		}
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > 200.0
+						&& view.tableau[0].size > 5 {
+			let mut inf = info.lock().unwrap();
+			inf.propice = 1;	
+		}
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 <= -120.0
+						&& view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -160.0
 						&& view.tableau[0].size > 5 && view.tableau[0].size < 18
 						&& view.temp.valeure_de_pente < 0.0
+						&& view.tableau[2].start_price - 20.0 > view.tableau[1].end_price
 						&& view.tableau[1].valeure_de_pente > 0.0 && view.tableau[1].size > 4 && view.tableau[1].size < 7
 						&& view.tableau[2].valeure_de_pente < 0.0 && view.tableau[2].size > 6
+						&& ispropice == 1
 						&& *wait_cl.lock().unwrap() == false {
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
@@ -156,13 +169,13 @@ pub mod BFC_1_mind {
                     if price < price_guard.btctousd {
                         println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
-						let info = Arc::clone(&infobot);
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
 						inf.findivp2_succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
 				*wait_cl.lock().unwrap() = false;
+				inf.propice = 0;
 			});
 			thread::sleep(time::Duration::from_secs(1));
 			return 1;

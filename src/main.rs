@@ -43,7 +43,7 @@
                 let info = Arc::clone(&infobot);
                 let btc_price = Arc::clone(&btc_price);
                 let handle = thread::spawn(move || {
-                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info, 2);
+                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info, 3);
                 });
                 thread::sleep(time::Duration::from_secs(2));
             }
