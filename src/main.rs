@@ -1,4 +1,4 @@
-//---------------------------Mod and use--------------------//
+//---------------------------Mod and use------------------------------------------------//
     mod Data {pub mod get_btc;}
     mod Screen {pub mod fenetre;}
     mod BFC_1 {pub mod brain; pub mod Bot_read{ pub mod pente; pub mod pente_view;} pub mod Bot_mind{pub mod algo_1; pub mod analyse;}}
@@ -9,7 +9,7 @@
     use std::{thread, time, io};
     use BFC_1::brain::BFC_1_brain;
     use crate::BFC_1::Bot_mind::analyse::analyseBFC_1::marqueures;
-//---------------------------main---------------------------//
+//---------------------------main-------------------------------------------------------//
 
     fn main() {
         let mut ordre = String::new();
@@ -25,6 +25,7 @@
         println!("---------------------Cryptobot : ");
         io::stdin().read_line(&mut ordre).expect("Echec de la lecture de l'entree utilisateur");
         while ordre != "exit\n" {
+//---------------------------recup data-------------------------------------------------//
             if ordre == "data -s\n" {
                 let should_stop_data = Arc::clone(&should_stop);
                 let btc_price = Arc::clone(&btc_price);
@@ -33,11 +34,13 @@
                 });
                 thread::sleep(time::Duration::from_secs(2));
             }
+//---------------------------arret recup data-------------------------------------------//
             if ordre == "data -d\n" {
                 *should_stop.lock().unwrap() = true;
                 thread::sleep(time::Duration::from_secs(2));
                 *should_stop.lock().unwrap() = false;
             }
+//---------------------------demmarage bot----------------------------------------------//
             if ordre == "bot -s\n" {
                 let should_stop_bot = Arc::clone(&should_stop2);
                 let info = Arc::clone(&infobot);
@@ -46,13 +49,13 @@
                     BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info, 3);
                 });
                 thread::sleep(time::Duration::from_secs(2));
-            }
+//---------------------------arret bot--------------------------------------------------//
             if ordre == "bot -d\n" {
                 *should_stop2.lock().unwrap() = true;
                 thread::sleep(time::Duration::from_secs(2));
                 *should_stop2.lock().unwrap() = false;
             }
-
+//---------------------------jouer haut-------------------------------------------------//
             if ordre == "play -t\n" {
                 let mut price = 0.0;
                 if true {
@@ -71,12 +74,15 @@
                     }
                 }
             }
+//---------------------------affiche les informations d'investissement------------------//
             if ordre == "info\n" {
                 let info = Arc::clone(&infobot);
                 let mut test = info.lock().unwrap();
                 test.print();
                 thread::sleep(time::Duration::from_secs(2));
             }
+//---------------------------jouer bas--------------------------------------------------//
+
             if ordre == "play -b\n" {
                 let mut price = 0.0;
                 if true {
@@ -103,6 +109,7 @@
             println!("--------------------Cryptobot : ");
             io::stdin().read_line(&mut ordre).expect("Echec de la lecture de l'entree utilisateur");
         }
+//=======================================================================================//
         *should_stop.lock().unwrap() = true;
         *should_stop2.lock().unwrap() = true;
         thread::sleep(time::Duration::from_secs(2));

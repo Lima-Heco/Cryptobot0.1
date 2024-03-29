@@ -28,7 +28,7 @@ pub mod BFC_1_mind {
 			let info = Arc::clone(&infobot);
 			findIVP1(view, btc_price_clone, wait_cl, info);
 		}
-//---------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
 		if selected == 4 {
 			let wait_cl = Arc::clone(&wait);
 			let btc_price_clone = Arc::clone(&btc_price);
@@ -36,6 +36,8 @@ pub mod BFC_1_mind {
 			let test = findP1(view, btc_price_clone, wait_cl, info);
 		}
 	}
+
+//=====================================findV2=======================================//
 
 	
 	pub fn findV2(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64{
@@ -78,8 +80,7 @@ pub mod BFC_1_mind {
 	}
 	
 
-//_____________________________________________________________________________________________________________________________________
-
+//=====================================findIVP1====50%-67%==========================//
 
 	pub fn findIVP1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64 {
 		let wait_cl = Arc::clone(&wait);
@@ -123,7 +124,7 @@ pub mod BFC_1_mind {
 		return 0;
 	}
 
-	//_____________________________________________________________________________________________________________________________________
+//=====================================findIVP2====58%-60%==========================//
 
 
 	pub fn findIVP2(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64 {
@@ -181,6 +182,8 @@ pub mod BFC_1_mind {
 		} 
 		return 0;
 	}
+//=====================================findP1=======================================//
+
 	pub fn findP1(view: &BFC_1_view, btc_price: Arc<RwLock<get_bitcoin::btcprice>>, wait: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) -> i64 {
 		let wait_cl = Arc::clone(&wait);
 		let info = Arc::clone(&infobot);
