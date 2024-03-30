@@ -50,7 +50,7 @@ pub mod BFC_1_mind {
 				let wait_cl = Arc::clone(&wait);
 				let info = Arc::clone(&infobot);
 				let mut inf = info.lock().unwrap();
-				inf.findv2_try += 1;
+				inf.ttry += 1;
 				*wait_cl.lock().unwrap() = true;
 				let mut price = 0.0;
                 if true {
@@ -67,7 +67,7 @@ pub mod BFC_1_mind {
                     } else {
 						let info = Arc::clone(&infobot);
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
-						inf.findv2_succes += 1;
+						inf.succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
@@ -86,9 +86,24 @@ pub mod BFC_1_mind {
 		let wait_cl = Arc::clone(&wait);
 		let info = Arc::clone(&infobot);
 		let btc_price_clone = Arc::clone(&btc_price);
+		let mut ispropice: i32 = 0;
+
+		if true {
+			let mut inf = info.lock().unwrap();
+			ispropice = inf.propice;
+		}
+		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > 170.0
+						&& view.tableau[0].size > 4
+						&& view.temp.valeure_de_pente as f64 * view.temp.size as f64 <= -20.0
+						&& view.temp.size > 2 {
+			let mut inf = info.lock().unwrap();
+			inf.propice = 2             ;	
+		}
+
 		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -170.0
 						&& ((view.tableau[0].size > 6 && view.tableau[0].size < 25) || (view.tableau[0].size > 4 && view.tableau[0].size < 25 && view.tableau[0].valeure_de_pente < 0.0))
-						&& view.temp.valeure_de_pente < -10.0
+						&& view.temp.valeure_de_pente < 1.0
+						&& ispropice > 0
 						&& *wait_cl.lock().unwrap() == false {
 			println!("________________________ZEEEEEEPARTIIIIII___________________________");
 			let handle = thread::spawn(move || {
@@ -96,7 +111,7 @@ pub mod BFC_1_mind {
 				let info = Arc::clone(&infobot);
 				*wait_cl.lock().unwrap() = true;
 				let mut inf = info.lock().unwrap();
-				inf.findivp1_try += 1;
+				inf.ttry += 1;
 				let mut price = 0.0;
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
@@ -112,11 +127,12 @@ pub mod BFC_1_mind {
                     } else {
 						let info = Arc::clone(&infobot);
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
-						inf.findivp1_succes += 1;
+						inf.succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
 				*wait_cl.lock().unwrap() = false;
+				inf.propice -= 1;
 			});
 			thread::sleep(time::Duration::from_secs(1));
 			return 1;
@@ -155,7 +171,7 @@ pub mod BFC_1_mind {
 				let info = Arc::clone(&infobot);
 				*wait_cl.lock().unwrap() = true;
 				let mut inf = info.lock().unwrap();
-				inf.findivp2_try += 1;
+				inf.ttry += 1;
 				let mut price = 0.0;
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
@@ -170,7 +186,7 @@ pub mod BFC_1_mind {
                         println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
                     } else {
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
-						inf.findivp2_succes += 1;
+						inf.succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);
@@ -194,7 +210,7 @@ pub mod BFC_1_mind {
 				let wait_cl = Arc::clone(&wait);
 				let info = Arc::clone(&infobot);
 				let mut inf = info.lock().unwrap();
-				inf.findp1_try += 1;
+				inf.ttry += 1;
 				*wait_cl.lock().unwrap() = true;
 				let mut price = 0.0;
                 if true {
@@ -211,7 +227,7 @@ pub mod BFC_1_mind {
                     } else {
 						let info = Arc::clone(&infobot);
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
-						inf.findp1_succes += 1;
+						inf.succes += 1;
                     }
                 }
 				let wait_cl = Arc::clone(&wait);

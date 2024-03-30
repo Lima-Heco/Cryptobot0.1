@@ -14,12 +14,13 @@
     fn main() {
         let mut ordre = String::new();
         let btc_price = get_bitcoin::btcprice::new();
-        let infobot = Arc::new(Mutex::new(marqueures::new()));
+        let infobot = Arc::new(Mutex::new(marqueures::new(String::from("test"))));
         let should_stop = Arc::new(Mutex::new(false));
         let should_stop_data = Arc::clone(&should_stop);
         let should_stop2 = Arc::new(Mutex::new(false));
         let should_stop_bot = Arc::clone(&should_stop2);
-
+        let infobot2 = Arc::new(Mutex::new(marqueures::new(String::from("bot de reconaissances de chutes a duree courtes avec recherche de situation"))));
+        
 
 
         println!("---------------------Cryptobot : ");
@@ -42,6 +43,7 @@
             }
 //---------------------------demmarage bot----------------------------------------------//
             if ordre == "bot -s\n" {
+                
                 let should_stop_bot = Arc::clone(&should_stop2);
                 let info = Arc::clone(&infobot);
                 let btc_price = Arc::clone(&btc_price);
@@ -49,6 +51,17 @@
                     BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info, 3);
                 });
                 thread::sleep(time::Duration::from_secs(2));
+            }
+
+            if ordre == "cbot\n" {
+                let should_stop_bot = Arc::clone(&should_stop2);
+                let info2 = Arc::clone(&infobot2);
+                let btc_price = Arc::clone(&btc_price);
+                let handle = thread::spawn(move || {
+                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info2, 3);
+                });
+                thread::sleep(time::Duration::from_secs(2));
+            }
 //---------------------------arret bot--------------------------------------------------//
             if ordre == "bot -d\n" {
                 *should_stop2.lock().unwrap() = true;
@@ -76,7 +89,7 @@
             }
 //---------------------------affiche les informations d'investissement------------------//
             if ordre == "info\n" {
-                let info = Arc::clone(&infobot);
+                let info = Arc::clone(&infobot2);
                 let mut test = info.lock().unwrap();
                 test.print();
                 thread::sleep(time::Duration::from_secs(2));
@@ -102,9 +115,10 @@
                 }
             }
 
-            /*if ordre == "f\n" {
-                ihm::fenetre()
-            }*/
+            if ordre == "f\n" {
+                let btc_price = Arc::clone(&btc_price);
+                ihm::fenetre(btc_price)
+            }
             ordre.clear();
             println!("--------------------Cryptobot : ");
             io::stdin().read_line(&mut ordre).expect("Echec de la lecture de l'entree utilisateur");

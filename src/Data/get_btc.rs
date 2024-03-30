@@ -9,6 +9,7 @@ pub mod get_bitcoin {
 //-----------------------------STRUCT-------------------------------//
 
     pub struct btcprice {
+        pub chandelle: Vec<[f64; 4]>,
         pub v_btctousd: Vec<f64>,
         pub v_btctousdless: Vec<f64>,
         pub v_btctousdmore: Vec<f64>,
@@ -26,6 +27,7 @@ pub mod get_bitcoin {
     
         pub fn new() -> Arc<RwLock<Self>> {
             Arc::new(RwLock::new(btcprice {
+            chandelle:Vec::new(),
             v_btctousd: Vec::new(),
             v_btctousdless: Vec::new(),
             v_btctousdmore: Vec::new(),
@@ -41,11 +43,8 @@ pub mod get_bitcoin {
             }))
         }
 
-        pub fn get_new(self: &mut Self, n1: f64, n2: f64, n3: f64, n4: i64) {
-            self.v_btctousd.push(n1);
-            self.v_btctousdmore.push(n2);
-            self.v_btctousdless.push(n3);
-            self.v_timestamp.push(n4);
+        pub fn get_new(self: &mut Self) {
+            self.chandelle.push([self.startbtctousd, self.btctousdless, self.btctousdmore, self.btctousd]);
         }
     }
 //-----------------------------FN_GET_DATA--------------------------//
@@ -75,7 +74,7 @@ pub mod get_bitcoin {
                 price_guard.next_time = true;
             }
         }
-        /*let btc_price_clone = Arc::clone(&btc_price);
+        let btc_price_clone = Arc::clone(&btc_price);
         let price = {
             let price_guard = btc_price_clone.read().unwrap();
             price_guard.btctousd
@@ -89,11 +88,11 @@ pub mod get_bitcoin {
         let minprice = {
             let price_guard = btc_price_clone.read().unwrap();
             price_guard.btctousdless
-        };*/
-        /*if true {
+        };
+        if true {
             let mut btc = btc_price_clone.write().unwrap();
-            btc.get_new(price, maxprice, minprice, timestamp);
-        }*/
+            btc.get_new();
+        }
         /*conn.execute(
             "INSERT INTO bitcoin_data (priceUsd, MAXpriceUsd, MINpriceUsd, timestamp) VALUES (?, ?, ?, ?)",
             params![price, maxprice, minprice, timestamp],
@@ -161,6 +160,7 @@ pub mod get_bitcoin {
                         i = 1;
                         min = -1.0;
                         max = -1.0;
+                        
                     }
                     if *should_stop_clone.lock().unwrap() {
                         break; // Sortir de la boucle si le drapeau est activé

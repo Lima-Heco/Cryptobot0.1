@@ -3,7 +3,7 @@
 | Taches | etat |
 | --------- | --------- |
 | implementer les pentes  | 100%  |
-| implementer l'IHM   | 5%  |
+| implementer l'IHM   | 15%  |
 | initialiser le multithread   | 100%  |
 
 # informations
