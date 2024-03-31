@@ -9,6 +9,8 @@ pub mod get_bitcoin {
 //-----------------------------STRUCT-------------------------------//
 
     pub struct btcprice {
+        pub conteur: f64,
+        pub point : Vec<[f64; 2]>,
         pub chandelle: Vec<[f64; 4]>,
         pub v_btctousd: Vec<f64>,
         pub v_btctousdless: Vec<f64>,
@@ -27,6 +29,8 @@ pub mod get_bitcoin {
     
         pub fn new() -> Arc<RwLock<Self>> {
             Arc::new(RwLock::new(btcprice {
+            conteur: 0.0,
+            point: Vec::new(),
             chandelle:Vec::new(),
             v_btctousd: Vec::new(),
             v_btctousdless: Vec::new(),
@@ -45,6 +49,8 @@ pub mod get_bitcoin {
 
         pub fn get_new(self: &mut Self) {
             self.chandelle.push([self.startbtctousd, self.btctousdless, self.btctousdmore, self.btctousd]);
+            self.conteur += 1.0;
+            self.point.push([self.conteur, self.btctousd]);
         }
     }
 //-----------------------------FN_GET_DATA--------------------------//

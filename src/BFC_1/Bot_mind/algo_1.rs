@@ -94,10 +94,10 @@ pub mod BFC_1_mind {
 		}
 		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > 170.0
 						&& view.tableau[0].size > 4
-						&& view.temp.valeure_de_pente as f64 * view.temp.size as f64 <= -20.0
+						&& view.temp.valeure_de_pente as f64 * view.temp.size as f64 <= -30.0
 						&& view.temp.size > 2 {
 			let mut inf = info.lock().unwrap();
-			inf.propice = 2             ;	
+			inf.propice = 1;	
 		}
 
 		if view.tableau[0].valeure_de_pente as f64 * view.tableau[0].size as f64 > -170.0
@@ -118,7 +118,7 @@ pub mod BFC_1_mind {
                     let price_guard = btc_price_clone.read().unwrap();
                     price = price_guard.btctousd;
                 }
-                thread::sleep(time::Duration::from_secs(90));
+                thread::sleep(time::Duration::from_secs(180));
                 if true {
                     let btc_price_clone = Arc::clone(&btc_price);
                     let price_guard = btc_price_clone.read().unwrap();
