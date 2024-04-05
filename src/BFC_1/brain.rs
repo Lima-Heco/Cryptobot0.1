@@ -8,26 +8,30 @@ pub mod BFC_1_brain {
 
     use std::sync::{Arc, Mutex, RwLock};
     use std::{thread, time, io};
+    use crate::solde;
 
-    pub fn bfcbrain(btc_price: Arc<RwLock<get_bitcoin::btcprice>>, should_stop_clone: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>, selected: i32) {
+    pub fn bfcbrain(btc_price: Arc<RwLock<get_bitcoin::btcprice>>, should_stop_clone: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>, selected: i32, mysold: Arc<Mutex<solde>>) {
         println!("bot started...");
         let mut view = BFC_1_view::new();
         let wait = Arc::new(Mutex::new(false));
         println!("Initialisation...");
+//==========================================================INIT======================================================//
         loop {
             let btc_price_clone = Arc::clone(&btc_price);
             if view.init_new_slope(btc_price_clone) == 1 {
                 break;
             }
         }
+//==========================================================RECUP DATA===============================================//
         println!("Demmarage...");
         loop {
             let info = Arc::clone(&infobot);
             let btc_price_clone = Arc::clone(&btc_price);
             &view.get_potential(btc_price_clone);
             let btc_price_clone = Arc::clone(&btc_price);
+            let mysold_clone = Arc::clone(&mysold);
             let wait_cl = Arc::clone(&wait);
-            select_algo(&view, btc_price_clone, wait_cl, info, selected);
+            select_algo(&view, btc_price_clone, wait_cl, info, selected, mysold_clone);
             if *should_stop_clone.lock().unwrap() {
                 break;
             }

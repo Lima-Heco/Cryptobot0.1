@@ -9,6 +9,40 @@
     use std::{thread, time, io};
     use BFC_1::brain::BFC_1_brain;
     use crate::BFC_1::Bot_mind::analyse::analyseBFC_1::marqueures;
+
+//---------------------------Solde struct-----------------------------------------------//
+
+    pub struct solde {
+        pub solde: f64,
+    }
+
+    impl solde {
+        pub fn new(depart: f64) -> Self {
+            solde {
+                solde: depart,
+            }
+        }
+
+        fn have_found(self: &mut Self, mise: f64) -> bool{
+            if self.solde >= mise {
+                return true;
+            } else {
+                println!("ERREURE: solde insufisant pour miser {}$", mise);
+                return false;
+            }
+        }
+        pub fn winorloose(self: &mut Self, mise: f64, win: bool) {
+            if !self.have_found(mise) {
+                return;
+            }
+            self.solde -= mise / 100.0;
+            if win {
+                self.solde += mise;
+            } else {
+                self.solde -= mise;
+            }
+        }
+    }
 //---------------------------main-------------------------------------------------------//
 
     fn main() {
@@ -21,6 +55,7 @@
         let should_stop_bot = Arc::clone(&should_stop2);
         let infobot2 = Arc::new(Mutex::new(marqueures::new(String::from("bot de reconaissances de chutes a duree courtes avec recherche de situation"))));
         
+        let mysolde = Arc::new(Mutex::new(solde::new(200.0)));
 
 
         println!("---------------------Cryptobot : ");
@@ -45,20 +80,22 @@
             if ordre == "bot -s\n" {
                 
                 let should_stop_bot = Arc::clone(&should_stop2);
+                let mysolde_clone = Arc::clone(&mysolde);
                 let info = Arc::clone(&infobot);
                 let btc_price = Arc::clone(&btc_price);
                 let handle = thread::spawn(move || {
-                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info, 3);
+                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info, 3, mysolde_clone);
                 });
                 thread::sleep(time::Duration::from_secs(2));
             }
 
             if ordre == "cbot\n" {
                 let should_stop_bot = Arc::clone(&should_stop2);
+                let mysolde_clone = Arc::clone(&mysolde);
                 let info2 = Arc::clone(&infobot2);
                 let btc_price = Arc::clone(&btc_price);
                 let handle = thread::spawn(move || {
-                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info2, 3);
+                    BFC_1_brain::bfcbrain(btc_price, should_stop_bot, info2, 3, mysolde_clone);
                 });
                 thread::sleep(time::Duration::from_secs(2));
             }
@@ -82,7 +119,17 @@
                     let price_guard = btc_price_clone.read().unwrap();
                     if price > price_guard.btctousd {
                         println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
+                        if true {
+							let mysold_clone = Arc::clone(&mysolde);
+							let mut onlinesold = mysold_clone.lock().unwrap();
+							onlinesold.winorloose(10.0, false);
+						}
                     } else {
+                        if true {
+							let mysold_clone = Arc::clone(&mysolde);
+							let mut onlinesold = mysold_clone.lock().unwrap();
+							onlinesold.winorloose(10.0, true);
+						}
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
                     }
                 }
@@ -90,6 +137,7 @@
 //---------------------------affiche les informations d'investissement------------------//
             if ordre == "info\n" {
                 let info = Arc::clone(&infobot2);
+                
                 let mut test = info.lock().unwrap();
                 test.print();
                 thread::sleep(time::Duration::from_secs(2));
@@ -109,15 +157,28 @@
                     let price_guard = btc_price_clone.read().unwrap();
                     if price < price_guard.btctousd {
                         println!("\n\n\n\n\nloose...\n\n\n\n\n\n\n");
+                        if true {
+							let mysold_clone = Arc::clone(&mysolde);
+							let mut onlinesold = mysold_clone.lock().unwrap();
+							onlinesold.winorloose(10.0, false);
+						}
                     } else {
                         println!("\n\n\n\n\nwin...\n\n\n\n\n\n\n");
+                        if true {
+							let mysold_clone = Arc::clone(&mysolde);
+							let mut onlinesold = mysold_clone.lock().unwrap();
+							onlinesold.winorloose(10.0, true);
+						}
                     }
                 }
             }
-
+//---------------------------IHM--------------------------------------------------------//
             if ordre == "f\n" {
+                let should_stop_bot = Arc::clone(&should_stop2);
+                let mysolde_clone = Arc::clone(&mysolde);
+                let info2 = Arc::clone(&infobot2);
                 let btc_price = Arc::clone(&btc_price);
-                ihm::fenetre(btc_price)
+                ihm::fenetre(btc_price, mysolde_clone, should_stop_bot, info2)
             }
             ordre.clear();
             println!("--------------------Cryptobot : ");

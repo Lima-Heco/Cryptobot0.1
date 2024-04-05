@@ -11,6 +11,9 @@ pub mod ihm {
 	use glib::signal::Propagation;
 	use glib::ControlFlow::Continue;
 	use crate::get_bitcoin::btcprice;
+	use crate::solde;
+	use crate::BFC_1_brain;
+	use crate::BFC_1::Bot_mind::analyse::analyseBFC_1::marqueures;
 	
 	use std::sync::{Arc, Mutex, RwLock};
     use std::{thread, time, io};
@@ -22,7 +25,7 @@ pub mod ihm {
 		y: f64,
 	}
 
-	pub fn fenetre(btc_price: Arc<RwLock<btcprice>>) {
+	pub fn fenetre(btc_price: Arc<RwLock<btcprice>>, mysold: Arc<Mutex<solde>>, should_stop_clone: Arc<Mutex<bool>>, infobot: Arc<Mutex<marqueures>>) {
 
 		let data_window = windowdat{x: 1920.0, y: 990.0};
 		// Initialise GTK
@@ -33,6 +36,14 @@ pub mod ihm {
 		window.set_title("Cryptobot");
 		window.set_default_size(data_window.x.round() as i32, data_window.y.round() as i32);
 
+		let mut thesolde: f64 = 0.0;
+
+		if true {
+			let mysold_clone = Arc::clone(&mysold);
+			let mut onlinesold = mysold_clone.lock().unwrap();
+			thesolde = onlinesold.solde;
+		}
+
 		let main_box = gtk::Box::new(gtk::Orientation::Horizontal, 0);
     	window.add(&main_box);
 		// Créer un label avec le chiffre à afficher
@@ -40,7 +51,7 @@ pub mod ihm {
 		let menu_box = gtk::Box::new(gtk::Orientation::Vertical, 0);
 		main_box.pack_end(&menu_box, false, false, 0);
 		
-		let label_text = format!("Solde: {}", 100);
+		let label_text = format!("Solde: {}", thesolde);
 		let price_label = Label::new(Some(&label_text)); // Chiffre à afficher
 		price_label.set_margin_bottom(150);
     	price_label.set_margin_end(150);
@@ -50,17 +61,34 @@ pub mod ihm {
 		menu_box.pack_start(&button_box, false, false, 0);
 		//window.add(&button_box);
 		let cloned_window = window.clone();
-		let button = Button::with_label("Refresh Window");
-		button.set_margin_end(50);
-		button.set_margin_top(20);
-		button.set_size_request(200, 50);
-		button.connect_clicked(move |_| {
+		let button_refresh = Button::with_label("Refresh Window");
+		button_refresh.set_margin_end(100);
+		button_refresh.set_margin_top(20);
+		button_refresh.set_size_request(200, 50);
+		button_refresh.connect_clicked(move |_| {
 			// Resize the window to a new size
 			
 			cloned_window.resize(600, 400);
 			
 		});
-		button_box.pack_start(&button, false, false, 0);
+		let btc_price_clone = Arc::clone(&btc_price);
+		let button_bot = Button::with_label("go down bot");
+		button_bot.set_margin_end(100);
+		button_bot.set_margin_top(20);
+		button_bot.set_size_request(200, 50);
+		button_bot.connect_clicked(move |_| {
+			let btc_price_clone = Arc::clone(&btc_price_clone);
+				let should_stop_bot = Arc::clone(&should_stop_clone);
+                let mysolde_clone = Arc::clone(&mysold);
+                let info2 = Arc::clone(&infobot);
+                let handle = thread::spawn(move || {
+					
+                    BFC_1_brain::bfcbrain(btc_price_clone, should_stop_bot, info2, 5, mysolde_clone);
+                });
+                thread::sleep(time::Duration::from_secs(2));
+		});
+		button_box.pack_start(&button_refresh, false, false, 0);
+		button_box.pack_start(&button_bot, false, false, 0);
 
 		let drawing_area = DrawingArea::new();
 		drawing_area.set_size_request(1500, 990); // Taille de la zone de dessin
@@ -105,6 +133,14 @@ pub mod ihm {
 			let test = Propagation::from(false);
 			test
 		});
+		
+		add_drawing_to_queue(&drawing_area);
+		fn add_drawing_to_queue(drawing_area: &DrawingArea) {
+			drawing_area.queue_draw();
+		}
+	
+		// Exemple d'appel de la fonction pour ajouter un nouveau dessin à la file d'attente
+		// Vous pouvez appeler cette fonction chaque fois que vous avez un nouveau dessin à ajouter
 
 		let drawing_area_clone = drawing_area.clone();
 		// Définir le comportement de fermeture de la fenêtre
@@ -133,18 +169,6 @@ pub mod ihm {
 		gtk::main();
 	}
 
-	/*fn simulate_window_resize(window: &gtk::Window, drawing_area: &gtk::DrawingArea, interval: Duration) {
-		let drawing_area_clone = drawing_area.clone();
-		timeout_add(interval, move || {
-			// Changez la taille de la fenêtre ici (vous pouvez ajuster les dimensions selon vos besoins)
-			window.resize(800, 600);
-			// Actualisez la page après le redimensionnement
-			drawing_area_clone.queue_draw();
-			// Retournez true pour continuer à appeler cette fonction périodiquement
-			Continue
-		});
-	}*/
-
 	fn draw_candlesticks(context: &gtk::cairo::Context, window: &windowdat, btc_price: Arc<RwLock<btcprice>>) {
 		// Exemple de données de chandelles
 		let mut candlestick_data: Vec<[f64; 4]> = Vec::new();
@@ -156,19 +180,6 @@ pub mod ihm {
 			points = price_guard.point.clone();
 		}
 		draw_line_chart(context, &points, 1500.0, 990.0)
-		/*let candle_width = 20.0; // Largeur d'une chandelle
-		let candle_spacing = 10.0; // Espacement entre les chandelles
-	
-		let mut x = 1500.0 / 4.0 * 3.0; // Position x de la première chandelle
-		//let mut y = window.y / 2;
-		draw_candlestick(context, x, firstchandel, firstchandel, candle_width);
-		for candle in candlestick_data {
-			// Dessiner la chandelle
-			draw_candlestick(context, x, candle, firstchandel, candle_width );
-	
-			// Déplacer la position x pour la prochaine chandelle
-			x -= candle_width + candle_spacing;
-		}*/
 	}
 	
 	fn draw_candlestick(context: &gtk::cairo::Context, x: f64, candle: [f64; 4], firstcandle: [f64; 4], width: f64) {
